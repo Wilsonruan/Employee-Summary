@@ -11,28 +11,142 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 // Call the `render` pass in an array containing all employee objects
 const render = require("./lib/htmlRenderer");
 
+var employee = [];
 
+function inits() {
+  const confirmNumberValidator = async (input) => {
+    return (isNaN(input) || input.length == 0) ? 'Please provide a valid number.': true;
+  };
 
+  const confirmStringValidator = async (input) => {
+    return (input.length == 0) ? 'Please provide a valid input.' : true;
+  };
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
+  const confirmEmailValidator = async (input) => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return (!(re.test(String(input).toLowerCase()))) ? 'Please provide a valid email.' : true;
+  };
 
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+  function generatorManager() {
+    inquirer.prompt([
+        {
+          type: "input",
+          message: "Please provide your name:",
+          name: "name",
+          validate: confirmStringValidator
+        },
+        {
+          number: "input",
+          message: "Please provide your employee ID number:",
+          name: "id",
+          validate: confirmNumberValidator
+        },
+        {
+          type: "input",
+          message: "Please provide your email:",
+          name: "email",
+          validate: confirmEmailValidator
+        },
+        {
+          number: "input",
+          message: "Please provide your Office Number:",
+          name: "officeNumber",
+          validate: confirmNumberValidator
+        },
+      ])
+      .then((res) => {
+        const manager = new Manager(res.name, res.id, res.email, res.officeNumber);
+        generatorOptions(manager);
+      });
+  }
+  function generatorOptions(newEmployee) {
+    employee.push(newEmployee)
+    inquirer.prompt([
+        {
+          type: "list",
+          message:
+            "Please select the options below:",
+          name: "member",
+          choices: ["Create Engineer Template", "Create Intern Template", "Start Your Team Template"],
+        },
+      ])
+      .then((res) => {
+        switch (res.member) {
+          case "Create Engineer Template":
+            generatorEngineer();
+            break;
+          case "Create Intern Template":
+            generatorIntern();
+            break;
+            default:
+            fs.writeFileSync(outputPath, render(employee), "utf-8");
+        }
+      });
+  }
+  function generatorEngineer() {
+    inquirer.prompt([
+        {
+          type: "input",
+          message: "Please provide engineer name:",
+          name: "name",
+          validate: confirmStringValidator
+        },
+        {
+          type: "input",
+          message: "Please provide your employee ID number:",
+          name: "id",
+          validate: confirmNumberValidator
+        },
+        {
+          type: "input",
+          message: "Please provide your email:",
+          name: "email",
+          validate: confirmEmailValidator
+        },
+        {
+          type: "input",
+          message: "Please provide your GitHub:",
+          name: "github",
+          validate: confirmStringValidator
+        },
+      ])
+      .then((res) => {
+        const engineer = new Engineer(res.name, res.id, res.email, res.github);
+        generatorOptions(engineer);
+      });
+  }
+  function generatorIntern() {
+    inquirer.prompt([
+        {
+          type: "input",
+          message: "Please provide intern name:",
+          name: "name",
+          validate: confirmStringValidator
+        },
+        {
+          type: "input",
+          message: "Please provide your employee ID number:",
+          name: "id",
+          validate: confirmNumberValidator
+        },
+        {
+          type: "input",
+          message: "Please provide your email:",
+          name: "email",
+          validate: confirmEmailValidator
+        },
+        {
+          type: "input",
+          message: "Please provide your school:",
+          name: "school",
+          validate: confirmStringValidator
+        },
+      ])
+      .then((res) => {
+        const intern = new Intern(res.name, res.id, res.email, res.school);
+        generatorOptions(intern);
+      });
+  }
+  generatorManager();
+}
+inits();
