@@ -20,7 +20,9 @@
 
 ## Usage:
     Step 1: Create a template for Manager. Step 2: Create a mix of engineers and interns. Step 3: Select "Start Your Team Template" to generator your team and end the program.
-![ScreenShot](./Assets/Images/ScreenShot.jpg)
+![ScreenShot](./Assets/Images/Step1.jpg)
+![ScreenShot](./Assets/Images/Step2.jpg)
+![ScreenShot](./Assets/Images/Step2.jpg)
 
 ## License:
    - [MIT](https://choosealicense.com/licenses/mit/)
