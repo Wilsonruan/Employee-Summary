@@ -10,7 +10,7 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 // Call the `render` pass in an array containing all employee objects
 const render = require("./lib/htmlRenderer");
-
+// Push all info here...
 var employee = [];
 
 function inits() {
@@ -84,7 +84,7 @@ function inits() {
             break;
             default:
             // After users complete all profiles.  User can select here to create the team template.
-            // If not output test is available, the function inside if statement will create output test.
+            // If output test is not available, the function if statement will create output test.
             if (!fs.existsSync(OUTPUT_DIR)) {
               fs.mkdirSync(OUTPUT_DIR);
             }
