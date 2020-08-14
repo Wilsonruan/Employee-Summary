@@ -75,14 +75,11 @@ function inits() {
         },
       ])
       .then((res) => {
-        switch (res.member) {
-          case "Create Engineer Template":
+        if (res.member == "Create Engineer Template") {
             generatorEngineer();
-            break;
-          case "Create Intern Template":
+          } else if (res.member == "Create Intern Template") {
             generatorIntern();
-            break;
-            default:
+          } else {
             // After users complete all profiles.  User can select here to create the team template.
             // If output test is not available, the function if statement will create output test.
             if (!fs.existsSync(OUTPUT_DIR)) {
